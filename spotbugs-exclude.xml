@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- Exclusions pour Spring Boot -->
+    <Match>
+        <Bug pattern="SE_BAD_FIELD"/>
+    </Match>
+    
+    <!-- Exclusions pour Lombok -->
+    <Match>
+        <Class name="~.*\..*_"/>
+    </Match>
+    
+    <!-- Exclusions pour MapStruct -->
+    <Match>
+        <Class name="~.*\..*MapperImpl"/>
+    </Match>
+    
+    <!-- Exclusions pour les classes générées -->
+    <Match>
+        <Class name="~.*\..*_$$_javassist"/>
+    </Match>
+    
+    <!-- Exclusions pour les tests -->
+    <Match>
+        <Class name="~.*\.test\..*"/>
+    </Match>
+    
+    <!-- Exclusions spécifiques aux DTOs -->
+    <Match>
+        <Class name="~.*\.dto\..*"/>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+    
+    <!-- Exclusions pour les entités JPA -->
+    <Match>
+        <Class name="~.*\.entity\..*"/>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+</FindBugsFilter>

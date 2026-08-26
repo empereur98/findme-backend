@@ -1,0 +1,611 @@
+{
+  "info": {
+    "name": "FindMe Backend API",
+    "description": "Collection complète pour tester l'API FindMe Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"password\": \"Password123!\",\n  \"firstName\": \"Test\",\n  \"lastName\": \"User\",\n  \"phone\": \"+33612345678\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Inscription d'un nouvel utilisateur"
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Connexion utilisateur - Stocke le token dans la variable"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set(\"token\", jsonData.token);",
+                  "pm.collectionVariables.set(\"userId\", jsonData.user.id);",
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Token is present\", function () {",
+                  "    pm.expect(jsonData.token).to.exist;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "logout"]
+            },
+            "description": "Déconnexion utilisateur"
+          },
+          "response": []
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/forgot-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "forgot-password"]
+            },
+            "description": "Demande de réinitialisation de mot de passe"
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"your-reset-token-here\",\n  \"newPassword\": \"NewPassword123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/reset-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "reset-password"]
+            },
+            "description": "Réinitialisation du mot de passe avec token"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get Current User Profile",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "me"]
+            },
+            "description": "Récupérer le profil de l'utilisateur connecté"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Updated\",\n  \"lastName\": \"Name\",\n  \"phone\": \"+33698765432\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "me"]
+            },
+            "description": "Mettre à jour le profil utilisateur"
+          },
+          "response": []
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oldPassword\": \"Password123!\",\n  \"newPassword\": \"NewPassword456!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me/password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "me", "password"]
+            },
+            "description": "Changer le mot de passe utilisateur"
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Avatar",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me/avatar",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "me", "avatar"]
+            },
+            "description": "Uploader une photo de profil"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/users?page=0&size=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Liste paginée des utilisateurs (Admin uniquement)"
+          },
+          "response": []
+        },
+        {
+          "name": "Create User (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"adminuser@example.com\",\n  \"password\": \"AdminPass123!\",\n  \"firstName\": \"Admin\",\n  \"lastName\": \"User\",\n  \"phone\": \"+33611111111\",\n  \"role\": \"USER\",\n  \"plan\": \"FREE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"]
+            },
+            "description": "Créer un utilisateur (Admin uniquement)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Plan",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plan\": \"PREMIUM\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}/plan",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "{{userId}}", "plan"]
+            },
+            "description": "Modifier le plan d'un utilisateur (Admin uniquement)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "{{userId}}"]
+            },
+            "description": "Supprimer un utilisateur (Admin uniquement)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Admin Stats",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "stats"]
+            },
+            "description": "Récupérer les statistiques globales (Admin uniquement)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Address",
+      "item": [
+        {
+          "name": "Create Address",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Domicile\",\n  \"country\": \"FR\",\n  \"city\": \"Paris\",\n  \"district\": \"1er arrondissement\",\n  \"street\": \"123 Rue de la Paix\",\n  \"landmark\": \"Près de la place Vendôme\",\n  \"gpsLat\": 48.8696,\n  \"gpsLng\": 2.3355,\n  \"type\": \"HOME\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/addresses",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "addresses"]
+            },
+            "description": "Créer une adresse"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Addresses",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/addresses",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "addresses"]
+            },
+            "description": "Récupérer les adresses de l'utilisateur"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Billing",
+      "item": [
+        {
+          "name": "Get Invoices",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/billing/invoices",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "billing", "invoices"]
+            },
+            "description": "Récupérer les factures de l'utilisateur"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Subscription",
+      "item": [
+        {
+          "name": "Get Current Subscription",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/subscriptions/current",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "subscriptions", "current"]
+            },
+            "description": "Récupérer l'abonnement actuel"
+          },
+          "response": []
+        },
+        {
+          "name": "Upgrade Subscription",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plan\": \"PREMIUM\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/subscriptions/upgrade",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "subscriptions", "upgrade"]
+            },
+            "description": "Mettre à niveau l'abonnement"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Support",
+      "item": [
+        {
+          "name": "Create Support Ticket",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subject\": \"Problème technique\",\n  \"message\": \"Je rencontre un problème avec mon compte, impossible de me connecter\",\n  \"type\": \"TECHNICAL\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/support/tickets",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "support", "tickets"]
+            },
+            "description": "Créer un ticket de support"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Tickets",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/support/tickets",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "support", "tickets"]
+            },
+            "description": "Récupérer les tickets de l'utilisateur"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Payment",
+      "item": [
+        {
+          "name": "Initiate Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 9.99,\n  \"currency\": \"EUR\",\n  \"paymentMethod\": \"card\",\n  \"description\": \"Abonnement Premium\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/payments/initiate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "payments", "initiate"]
+            },
+            "description": "Initier un paiement"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "Get User Notifications",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/notifications",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notifications"]
+            },
+            "description": "Récupérer les notifications de l'utilisateur"
+          },
+          "response": []
+        },
+        {
+          "name": "Mark as Read",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{baseUrl}}/api/notifications/{{notificationId}}/read",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notifications", "{{notificationId}}", "read"]
+            },
+            "description": "Marquer une notification comme lue"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Geo",
+      "item": [
+        {
+          "name": "Geocode Address",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/geo/geocode?address=123 Rue de la Paix, Paris",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "geo", "geocode"],
+              "query": [
+                {
+                  "key": "address",
+                  "value": "123 Rue de la Paix, Paris"
+                }
+              ]
+            },
+            "description": "Géocoder une adresse"
+          },
+          "response": []
+        },
+        {
+          "name": "Reverse Geocode",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/geo/reverse-geocode?lat=48.8566&lng=2.3522",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "geo", "reverse-geocode"],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": "48.8566"
+                },
+                {
+                  "key": "lng",
+                  "value": "2.3522"
+                }
+              ]
+            },
+            "description": "Géocodage inverse (coordonnées vers adresse)"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

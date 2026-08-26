@@ -1,0 +1,238 @@
+<?xml version="1.0"?>
+<ruleset name="Spring Boot Best Practices"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+    <description>
+        Règles PMD personnalisées pour les bonnes pratiques Spring Boot
+    </description>
+
+    <!-- Exclusions -->
+    <exclude-pattern>.*/\.git/.*</exclude-pattern>
+    <exclude-pattern>.*/target/.*</exclude-pattern>
+    <exclude-pattern>.*/\.mvn/.*</exclude-pattern>
+    <exclude-pattern>.*/generated/.*</exclude-pattern>
+
+    <!-- Règles de base -->
+    <rule ref="category/java/bestpractices.xml">
+        <!-- Exclusions spécifiques -->
+        <exclude name="AbstractClassWithoutAbstractMethod"/>
+        <exclude name="AvoidReassigningParameters"/>
+        <exclude name="AvoidStringLiteralEquality"/>
+        <exclude name="DefaultLabel"/>
+        <exclude name="GuardLogStatement"/>
+        <exclude name="JUnit4TestShouldUseBeforeAnnotation"/>
+        <exclude name="JUnit4TestShouldUseAfterAnnotation"/>
+        <exclude name="JUnit4TestShouldUseTestAnnotation"/>
+    </rule>
+
+    <rule ref="category/java/codestyle.xml">
+        <exclude name="AtLeastOneConstructor"/>
+        <exclude name="CommentDefaultAccessModifier"/>
+        <exclude name="CommentRequired"/>
+        <exclude name="DefaultPackage"/>
+        <exclude name="EmptyMethodInAbstractClassShouldBeAbstract"/>
+        <exclude name="FieldNamingConventions"/>
+        <exclude name="LocalVariableCouldBeFinal"/>
+        <exclude name="LongVariable"/>
+        <exclude name="MethodArgumentCouldBeFinal"/>
+        <exclude name="MethodNamingConventions"/>
+        <exclude name="OnlyOneReturn"/>
+        <exclude name="ShortClassName"/>
+        <exclude name="ShortMethodName"/>
+        <exclude name="ShortVariable"/>
+        <exclude name="TooManyStaticImports"/>
+        <exclude name="UnnecessaryAnnotationValueElement"/>
+        <exclude name="UnnecessaryConstructor"/>
+        <exclude name="UnnecessaryFullyQualifiedName"/>
+        <exclude name="UnnecessaryModifier"/>
+        <exclude name="UselessParentheses"/>
+    </rule>
+
+    <rule ref="category/java/design.xml">
+        <exclude name="AvoidCatchingGenericException"/>
+        <exclude name="AvoidDeeplyNestedIfStmts"/>
+        <exclude name="AvoidReassigningLoopVariables"/>
+        <exclude name="CognitiveComplexity"/>
+        <exclude name="CyclomaticComplexity"/>
+        <exclude name="DataClass"/>
+        <exclude name="ExcessiveClassLength"/>
+        <exclude name="ExcessiveImports"/>
+        <exclude name="ExcessiveMethodLength"/>
+        <exclude name="ExcessiveParameterList"/>
+        <exclude name="ExcessivePublicCount"/>
+        <exclude name="LawOfDemeter"/>
+        <exclude name="LooseCoupling"/>
+        <exclude name="NcssCount"/>
+        <exclude name="NPathComplexity"/>
+        <exclude name="SingularField"/>
+        <exclude name="TooManyFields"/>
+        <exclude name="TooManyMethods"/>
+    </rule>
+
+    <rule ref="category/java/documentation.xml">
+        <exclude name="CommentRequired"/>
+        <exclude name="CommentSize"/>
+        <exclude name="UncommentedEmptyConstructor"/>
+        <exclude name="UncommentedEmptyMethodBody"/>
+    </rule>
+
+    <rule ref="category/java/errorprone.xml">
+        <exclude name="AssignmentInOperand"/>
+        <exclude name="AssignmentToNonFinalStatic"/>
+        <exclude name="AvoidBranchingStatementAsLastInLoop"/>
+        <exclude name="AvoidDecimalLiteralsInBigDecimalConstructor"/>
+        <exclude name="AvoidDuplicateLiterals"/>
+        <exclude name="AvoidMultipleUnaryOperators"/>
+        <exclude name="AvoidUsingOctalValues"/>
+        <exclude name="BeanMembersShouldSerialize"/>
+        <exclude name="BrokenNullCheck"/>
+        <exclude name="CloneMethodMustImplementCloneable"/>
+        <exclude name="CompareObjectsWithEquals"/>
+        <exclude name="ConstructorCallsOverridableMethod"/>
+        <exclude name="DoNotCallSystemExit"/>
+        <exclude name="EmptyIfStmt"/>
+        <exclude name="EmptyWhileStmt"/>
+        <exclude name="ImportFromSamePackage"/>
+        <exclude name="MissingBreakInSwitch"/>
+        <exclude name="MissingSerialVersionUID"/>
+        <exclude name="NullDereference"/>
+        <exclude name="OverrideBothEqualsAndHashcode"/>
+        <exclude name="ReturnEmptyCollectionRatherThanNull"/>
+        <exclude name="SimpleDateFormatNeedsLocale"/>
+        <exclude name="SingletonClassReturningNewInstance"/>
+        <exclude name="SuspiciousOctalEscape"/>
+        <exclude name="UnnecessaryBooleanExpression"/>
+        <exclude name="UnnecessaryCaseChange"/>
+        <exclude name="UselessOperationOnImmutable"/>
+    </rule>
+
+    <rule ref="category/java/multithreading.xml">
+        <exclude name="AvoidSynchronizedAtMethodLevel"/>
+        <exclude name="DoNotUseThreads"/>
+        <exclude name="DoubleCheckedLocking"/>
+        <exclude name="NonThreadSafeSingleton"/>
+        <exclude name="UnsynchronizedStaticDateFormatter"/>
+        <exclude name="UseConcurrentHashMap"/>
+    </rule>
+
+    <rule ref="category/java/performance.xml">
+        <exclude name="AvoidFloatingPointEquality"/>
+        <exclude name="AvoidInstantiatingObjectsInLoops"/>
+        <exclude name="AvoidStringBufferField"/>
+        <exclude name="ConsecutiveAppendsShouldReuse"/>
+        <exclude name="ConsecutiveLiteralAppends"/>
+        <exclude name="InefficientEmptyStringCheck"/>
+        <exclude name="InefficientStringBuffering"/>
+        <exclude name="InsufficientStringBufferDeclaration"/>
+        <exclude name="OptimizableToArrayCall"/>
+        <exclude name="RedundantFieldInitializer"/>
+        <exclude name="SimplifyStartsWith"/>
+        <exclude name="StringInstantiation"/>
+        <exclude name="TooFewBranchesForASwitchStatement"/>
+        <exclude name="UnnecessaryWrapperObjectCreation"/>
+        <exclude name="UseArrayListInsteadOfVector"/>
+        <exclude name="UseArraysAsList"/>
+        <exclude name="UseIndexOfChar"/>
+        <exclude name="UseStringBufferForStringAppends"/>
+        <exclude name="UselessStringValueOf"/>
+    </rule>
+
+    <rule ref="category/java/security.xml">
+        <exclude name="HardCodedCryptoKey"/>
+        <exclude name="InsecureCryptoIv"/>
+    </rule>
+
+    <!-- Règles personnalisées pour Spring Boot -->
+    <rule name="SpringControllerShouldHaveRequestMapping"
+          language="java"
+          message="Les contrôleurs Spring devraient avoir une annotation @RequestMapping"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            Vérifie que les contrôleurs Spring ont une annotation @RequestMapping au niveau de la classe.
+        </description>
+        <properties>
+            <property name="xpath">
+                <value>
+                    //ClassOrInterfaceDeclaration[
+                        @Annotation='org.springframework.stereotype.Controller' or
+                        @Annotation='org.springframework.web.bind.annotation.RestController'
+                    ] and
+                    not(Annotation/MarkerAnnotation/Name[
+                        @Image='org.springframework.web.bind.annotation.RequestMapping' or
+                        @Image='org.springframework.web.bind.annotation.GetMapping' or
+                        @Image='org.springframework.web.bind.annotation.PostMapping' or
+                        @Image='org.springframework.web.bind.annotation.PutMapping' or
+                        @Image='org.springframework.web.bind.annotation.DeleteMapping' or
+                        @Image='org.springframework.web.bind.annotation.PatchMapping'
+                    ])
+                ]
+                </value>
+            </property>
+        </properties>
+        <priority>3</priority>
+    </rule>
+
+    <rule name="AvoidSystemOutPrintln"
+          language="java"
+          message="Évitez d'utiliser System.out.println - utilisez un logger"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            Évitez d'utiliser System.out.println dans le code de production.
+        </description>
+        <properties>
+            <property name="xpath">
+                <value>
+                    //PrimaryExpression/PrimaryPrefix/Name[
+                        @Image='System' and
+                        following-sibling::PrimarySuffix/Name[@Image='out'] and
+                        following-sibling::PrimarySuffix/Name[@Image='println']
+                    ]
+                </value>
+            </property>
+        </properties>
+        <priority>3</priority>
+    </rule>
+
+    <rule name="AvoidSystemErrPrintln"
+          language="java"
+          message="Évitez d'utiliser System.err.println - utilisez un logger"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            Évitez d'utiliser System.err.println dans le code de production.
+        </description>
+        <properties>
+            <property name="xpath">
+                <value>
+                    //PrimaryExpression/PrimaryPrefix/Name[
+                        @Image='System' and
+                        following-sibling::PrimarySuffix/Name[@Image='err'] and
+                        following-sibling::PrimarySuffix/Name[@Image='println']
+                    ]
+                </value>
+            </property>
+        </properties>
+        <priority>3</priority>
+    </rule>
+
+    <rule name="AvoidPrintStackTrace"
+          language="java"
+          message="Évitez d'utiliser printStackTrace - utilisez un logger"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            Évitez d'utiliser printStackTrace dans le code de production.
+        </description>
+        <properties>
+            <property name="xpath">
+                <value>
+                    //PrimaryExpression/PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Name[
+                        @Image='printStackTrace'
+                    ]
+                </value>
+            </property>
+        </properties>
+        <priority>3</priority>
+    </rule>
+
+</ruleset>
