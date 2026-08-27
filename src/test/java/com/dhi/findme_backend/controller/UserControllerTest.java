@@ -59,7 +59,7 @@ class UserControllerTest {
 
         mockMvc.perform(get("/api/users/me"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email", is("user@example.com")));
+                .andExpect(jsonPath("$.data.email", is("user@example.com")));
     }
 
     @Test
@@ -72,7 +72,7 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.firstName", is("Updated")));
+                .andExpect(jsonPath("$.data.firstName", is("Updated")));
     }
 
     @Test
@@ -109,14 +109,14 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.email", is("new.user@example.com")));
+                .andExpect(jsonPath("$.data.email", is("new.user@example.com")));
     }
 
     @Test
     void deleteUser_shouldSucceed() throws Exception {
         doNothing().when(userService).deleteUser(userId);
         mockMvc.perform(delete("/api/users/" + userId))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -129,6 +129,6 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.plan", is("premium")));
+                .andExpect(jsonPath("$.data.plan", is("premium")));
     }
 }

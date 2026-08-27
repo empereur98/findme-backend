@@ -69,7 +69,7 @@ class ExportControllerTest {
 
         mockMvc.perform(post("/api/exports/pdf/" + addressId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.filename", is("export.pdf")));
+                .andExpect(jsonPath("$.data.filename", is("export.pdf")));
     }
 
     @Test
@@ -90,7 +90,7 @@ class ExportControllerTest {
 
         mockMvc.perform(get("/api/exports/history"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content[0].filename", is("export.pdf")));
+                .andExpect(jsonPath("$.data.content", hasSize(1)))
+                .andExpect(jsonPath("$.data.content[0].filename", is("export.pdf")));
     }
 }
