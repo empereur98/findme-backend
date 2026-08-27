@@ -80,7 +80,7 @@ class AddressControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name", is("Home")));
+                .andExpect(jsonPath("$.data.name", is("Home")));
     }
 
     @Test
@@ -103,7 +103,7 @@ class AddressControllerTest {
 
         mockMvc.perform(get("/api/addresses/" + addressId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(addressId.toString())));
+                .andExpect(jsonPath("$.data.id", is(addressId.toString())));
     }
 
     @Test
@@ -116,14 +116,14 @@ class AddressControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is("New Name")));
+                .andExpect(jsonPath("$.data.name", is("New Name")));
     }
 
     @Test
     void deleteAddress_whenExists_shouldSucceed() throws Exception {
         doNothing().when(addressService).deleteAddress(eq(addressId), eq(userId));
         mockMvc.perform(delete("/api/addresses/" + addressId))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk());
     }
 
     @Test

@@ -9,6 +9,7 @@ import com.dhi.findme_backend.exception.ResourceNotFoundException;
 import com.dhi.findme_backend.mapper.SupportTicketMapper;
 import com.dhi.findme_backend.repository.SupportTicketRepository;
 import com.dhi.findme_backend.repository.UserRepository;
+import com.dhi.findme_backend.security.SecurityUtilsInterface;
 import com.dhi.findme_backend.service.impl.SupportTicketServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,6 +42,9 @@ class SupportTicketServiceTest {
 
     @Mock
     private SupportTicketMapper supportTicketMapper;
+
+    @Mock
+    private SecurityUtilsInterface securityUtils;
 
     @InjectMocks
     private SupportTicketServiceImpl supportTicketService;
@@ -65,7 +70,8 @@ class SupportTicketServiceTest {
         createRequest = new SupportTicketCreateRequest(
                 "Problème de connexion",
                 "Je n'arrive pas à me connecter à mon compte",
-                "technique"
+                "technique",
+                null
         );
 
         testTicket = new SupportTicket();
@@ -90,7 +96,8 @@ class SupportTicketServiceTest {
                 "technique",
                 "Non traité",
                 LocalDateTime.now(),
-                "http://avatar.url"
+                "http://avatar.url",
+                null
         );
     }
 
@@ -123,7 +130,8 @@ class SupportTicketServiceTest {
         SupportTicketCreateRequest billingRequest = new SupportTicketCreateRequest(
                 "Facturation incorrecte",
                 "Mon abonnement a été facturé deux fois",
-                "facturation"
+                "facturation",
+                null
         );
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(testUser));
@@ -137,8 +145,9 @@ class SupportTicketServiceTest {
     }
 
     @Test
-    void testGetTickets_Success() {
+    void testGetTickets_AsAdmin_ReturnsAllTickets() {
         Page<SupportTicket> ticketPage = new PageImpl<>(java.util.List.of(testTicket));
+        when(securityUtils.isAdmin()).thenReturn(true);
         when(supportTicketRepository.findAll(any(Pageable.class))).thenReturn(ticketPage);
         when(supportTicketMapper.toSupportTicketResponse(any(SupportTicket.class))).thenReturn(ticketResponse);
 
@@ -153,6 +162,7 @@ class SupportTicketServiceTest {
     @Test
     void testGetTickets_EmptyList() {
         Page<SupportTicket> emptyPage = new PageImpl<>(java.util.List.of());
+        when(securityUtils.isAdmin()).thenReturn(true);
         when(supportTicketRepository.findAll(any(Pageable.class))).thenReturn(emptyPage);
 
         Pageable pageable = PageRequest.of(0, 10);
@@ -166,6 +176,7 @@ class SupportTicketServiceTest {
     @Test
     void testGetTickets_WithFilters() {
         Page<SupportTicket> ticketPage = new PageImpl<>(java.util.List.of(testTicket));
+        when(securityUtils.isAdmin()).thenReturn(true);
         when(supportTicketRepository.findAll(any(Pageable.class))).thenReturn(ticketPage);
         when(supportTicketMapper.toSupportTicketResponse(any(SupportTicket.class))).thenReturn(ticketResponse);
 
@@ -174,6 +185,33 @@ class SupportTicketServiceTest {
 
         assertNotNull(response);
         verify(supportTicketRepository).findAll(pageable);
+    }
+
+    @Test
+    void testGetTickets_AsRegularUser_ReturnsOnlyOwnTickets() {
+        when(securityUtils.isAdmin()).thenReturn(false);
+        when(securityUtils.getCurrentUserId()).thenReturn(userId);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(testUser));
+        when(supportTicketRepository.findByUser(eq(testUser), any(Pageable.class)))
+                .thenReturn(new PageImpl<>(java.util.List.of(testTicket)));
+        when(supportTicketMapper.toSupportTicketResponse(any(SupportTicket.class))).thenReturn(ticketResponse);
+
+        Pageable pageable = PageRequest.of(0, 10);
+        var response = supportTicketService.getTickets(pageable, null, null, null);
+
+        assertEquals(1, response.getTotalElements());
+        verify(supportTicketRepository).findByUser(testUser, pageable);
+        verify(supportTicketRepository, never()).findAll(any(Pageable.class));
+    }
+
+    @Test
+    void testGetTickets_AsRegularUser_WhenUserMissing_Throws() {
+        when(securityUtils.isAdmin()).thenReturn(false);
+        when(securityUtils.getCurrentUserId()).thenReturn(userId);
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        Pageable pageable = PageRequest.of(0, 10);
+        assertThrows(ResourceNotFoundException.class, () -> supportTicketService.getTickets(pageable, null, null, null));
     }
 
     @Test

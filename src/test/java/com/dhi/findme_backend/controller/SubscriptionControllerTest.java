@@ -68,8 +68,8 @@ class SubscriptionControllerTest {
 
         mockMvc.perform(get("/api/subscriptions/me"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.plan", is("free")))
-                .andExpect(jsonPath("$.maxAddresses", is(5)));
+                .andExpect(jsonPath("$.data.plan", is("free")))
+                .andExpect(jsonPath("$.data.maxAddresses", is(5)));
     }
 
     @Test
@@ -82,7 +82,7 @@ class SubscriptionControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.paymentLink", is("http://payment.link")));
+                .andExpect(jsonPath("$.data.paymentLink", is("http://payment.link")));
     }
 
     @Test
@@ -111,7 +111,7 @@ class SubscriptionControllerTest {
     @Test
     void cancelSubscription_whenUserHasSubscription_shouldCancel() throws Exception {
         mockMvc.perform(delete("/api/subscriptions/me"))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk());
     }
 
     @Test

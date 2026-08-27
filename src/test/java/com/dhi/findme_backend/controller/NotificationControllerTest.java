@@ -82,7 +82,7 @@ class NotificationControllerTest {
 
         mockMvc.perform(patch("/api/notifications/" + notificationId + "/read"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.read", is(true)));
+                .andExpect(jsonPath("$.data.read", is(true)));
     }
 
     @Test

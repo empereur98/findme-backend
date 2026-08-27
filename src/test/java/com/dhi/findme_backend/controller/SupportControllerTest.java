@@ -78,7 +78,7 @@ class SupportControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.subject", is("Subject")));
+                .andExpect(jsonPath("$.data.subject", is("Subject")));
     }
 
     @Test
@@ -88,8 +88,8 @@ class SupportControllerTest {
 
         mockMvc.perform(get("/api/support/tickets"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content[0].id", is(ticketId.toString())));
+                .andExpect(jsonPath("$.data.content", hasSize(1)))
+                .andExpect(jsonPath("$.data.content[0].id", is(ticketId.toString())));
     }
 
     @Test
@@ -102,7 +102,7 @@ class SupportControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status", is("In Progress")));
+                .andExpect(jsonPath("$.data.status", is("In Progress")));
     }
 
     @Test
@@ -114,6 +114,6 @@ class SupportControllerTest {
         mockMvc.perform(multipart("/api/support/tickets/upload-attachment")
                         .file(file))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.attachmentUrl", is("http://localhost:8080/uploads/support-attachments/test.pdf")));
+                .andExpect(jsonPath("$.data.attachmentUrl", is("http://localhost:8080/uploads/support-attachments/test.pdf")));
     }
 }
