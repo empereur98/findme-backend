@@ -1,15 +1,15 @@
 package com.dhi.findme_backend;
 
-// Test désactivé car le contexte Spring échoue à charger
-// Nécessite une configuration de test séparée pour fonctionner correctement
-// Ce test sera réactivé une fois la configuration Spring corrigée
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
-// @SpringBootTest
-// @ActiveProfiles("test")
-// class FindmeBackendApplicationTests {
-//
-// 	@Test
-// 	void contextLoads() {
-// 	}
-//
-// }
+@SpringBootTest
+@ActiveProfiles("test")
+class FindmeBackendApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
