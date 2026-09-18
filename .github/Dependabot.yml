@@ -1,0 +1,30 @@
+  Dependabot · YML
+  # Role de l'outil : Dependabot (SCA - Software Composition Analysis) analyse
+  # les dependances directes ET transitives a la recherche de vulnerabilites
+  # connues (CVE) et de versions obsoletes. Contrairement a Gitleaks/JaCoCo,
+  # il n'est pas un "job" de la pipeline : c'est un outil natif GitHub qui tourne
+  # a part et ouvre lui-meme des Pull Requests de mise a jour, visibles aussi
+  # dans l'onglet Security > Dependabot alerts (cf. Chapitre 3).
+  version: 2
+  updates:
+    # Dependances Maven (pom.xml)
+    - package-ecosystem: "maven"
+      directory: "/"
+      schedule:
+        interval: "weekly"
+      open-pull-requests-limit: 5
+      labels: ["dependencies"]
+
+    # Actions tierces utilisees dans les workflows (.github/workflows/*.yml)
+    - package-ecosystem: "github-actions"
+      directory: "/"
+      schedule:
+        interval: "weekly"
+      labels: ["dependencies", "github-actions"]
+
+    # Image de base Docker (Dockerfile)
+    - package-ecosystem: "docker"
+      directory: "/"
+      schedule:
+        interval: "weekly"
+      labels: ["dependencies", "docker"]

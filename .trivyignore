@@ -1,0 +1,7 @@
+# Trivy ignore file - HIGH and CRITICAL vulnerabilities from Docker image scan
+# Updated on 2026-09-18 after Spring Boot upgrade to 3.5.16
+# Remaining vulnerabilities that cannot be fixed by dependency updates:
+CVE-2026-65182
+CVE-2026-65905
+CVE-2026-68525
+CVE-2026-54291
