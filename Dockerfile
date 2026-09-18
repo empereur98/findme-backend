@@ -6,7 +6,7 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 
-RUN mvn clean package -DskipTests -Dcheckstyle.skip=true -Dpmd.skip=true -B
+RUN ./mvnw clean package -DskipTests -Dcheckstyle.skip=true -Dpmd.skip=true -B
 
 # Runtime stage
 FROM eclipse-temurin:21-jre-alpine
