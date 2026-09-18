@@ -148,7 +148,12 @@ jobs:
           exit-code: '1' # bloque le job si une vulnerabilite haute/critique est trouvee
 
       - name: Upload Trivy results to Security tab
-        if: always()
+        if: always() && hashFiles('trivy-results.sarif') != ''
         uses: github/codeql-action/upload-sarif@v3
         with:
+          name: trivy-scan-results
+          path: |
+            trivy-results.json
+            trivy-results.sarif
+          retention-days: 14
           sarif_file: trivy-results.sarif
