@@ -22,7 +22,9 @@ public abstract class BaseEntity implements Persistable<UUID> {
     private boolean isNew = true;
 
     @PrePersist
-    protected void onCreate() {
+    @PostPersist
+    @PostLoad
+    protected void markNotNew() {
         isNew = false;
     }
 

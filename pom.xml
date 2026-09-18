@@ -206,6 +206,9 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<argLine>@{argLine} -XX:+EnableDynamicAgentLoading -Xshare:off</argLine>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -272,6 +275,14 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.11</version>
+				<configuration>
+					<excludes>
+						<!-- DTOs are pure data carriers with no branching logic -->
+						<exclude>**/dto/**</exclude>
+						<!-- MapStruct-generated mapper implementations: generated code, not hand-written -->
+						<exclude>**/mapper/*MapperImpl.class</exclude>
+					</excludes>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
@@ -284,6 +295,43 @@
 						<goals>
 							<goal>report</goal>
 						</goals>
+					</execution>
+					<execution>
+						<!--
+							Quality Gate de couverture (cf. support Chapitre 2).
+							Seuil de DEPART volontairement bas (35% lignes / 20% branches) :
+							ce projet a une grosse base de code existante, on ne connait pas
+							encore sa couverture reelle. Avant de figer ce seuil :
+							  1) lancer "mvn test jacoco:report" en local
+							  2) ouvrir target/site/jacoco/index.html
+							  3) remonter <minimum> progressivement vers 70% (ligne) / 60% (branche)
+								 a chaque evolution significative du code, comme recommande
+								 dans le support (strategie realiste, Chapitre 2).
+						-->
+						<id>jacoco-check</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<rule>
+									<element>BUNDLE</element>
+									<limits>
+										<limit>
+											<counter>LINE</counter>
+											<value>COVEREDRATIO</value>
+											<minimum>0.35</minimum>
+										</limit>
+										<limit>
+											<counter>BRANCH</counter>
+											<value>COVEREDRATIO</value>
+											<minimum>0.20</minimum>
+										</limit>
+									</limits>
+								</rule>
+							</rules>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>

@@ -154,14 +154,14 @@ public class AddressServiceImpl implements AddressService {
             throw new AccessDeniedException("Vous n'êtes pas autorisé à supprimer cette adresse");
         }
 
-        addressRepository.delete(address);
-
         // Décrémenter le compteur d'adresses de l'utilisateur
         User user = address.getUser();
         if (user.getAddressesCreatedCount() > 0) {
             user.setAddressesCreatedCount(user.getAddressesCreatedCount() - 1);
             userRepository.save(user);
         }
+
+        addressRepository.delete(address);
     }
 
     @Override
