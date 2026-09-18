@@ -123,7 +123,7 @@ jobs:
   # vulnerabilites connues (CVE). L'image n'est PAS publiee ici (pas de push
   # vers un registry) : ce job reste dans le perimetre "securite du
   # conteneur" du Chapitre 3. La publication + le deploiement (Chapitre 4)
-  # pourront etre ajoutes dans un second temps.
+  # pourront être ajoutés dans un second temps.
   container-scan:
     name: Container Security (Trivy)
     runs-on: ubuntu-latest
@@ -151,9 +151,4 @@ jobs:
         if: always() && hashFiles('trivy-results.sarif') != ''
         uses: github/codeql-action/upload-sarif@v3
         with:
-          name: trivy-scan-results
-          path: |
-            trivy-results.json
-            trivy-results.sarif
-          retention-days: 14
           sarif_file: trivy-results.sarif
