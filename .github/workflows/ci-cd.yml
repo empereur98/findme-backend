@@ -123,7 +123,7 @@ jobs:
   # vulnerabilites connues (CVE). L'image n'est PAS publiee ici (pas de push
   # vers un registry) : ce job reste dans le perimetre "securite du
   # conteneur" du Chapitre 3. La publication + le deploiement (Chapitre 4)
-  # pourront être ajoutés dans un second temps.
+  # pourront etre ajoutes dans un second temps.
   container-scan:
     name: Container Security (Trivy)
     runs-on: ubuntu-latest
@@ -138,8 +138,24 @@ jobs:
       - name: Build image (local, non publiee)
         run: docker build -t findme-backend:${{ github.sha }} .
 
+      # --- Etape lisible (non bloquante) -------------------------------------
+      # Meme scan, mais affiche directement le detail (CVE, package, version
+      # corrigee) dans les logs Actions. Utile pour diagnostiquer sans avoir
+      # a ouvrir l'onglet Security (qui necessite parfois des droits
+      # supplementaires sur un depot prive).
+      - name: Trivy scan (table, informational)
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          image-ref: findme-backend:${{ github.sha }}
+          format: table
+          severity: HIGH,CRITICAL
+          exit-code: '0'
+
+      # --- Etape bloquante (Quality Gate) -------------------------------------
+      # Meme resultat, au format SARIF, publie dans l'onglet Security. C'est
+      # cette etape qui fait echouer le job si une CVE HIGH/CRITICAL subsiste.
       - name: Trivy scan
-        uses: aquasecurity/trivy-action@v0.36.0
+        uses: aquasecurity/trivy-action@0.24.0
         with:
           image-ref: findme-backend:${{ github.sha }}
           format: sarif
@@ -148,7 +164,7 @@ jobs:
           exit-code: '1' # bloque le job si une vulnerabilite haute/critique est trouvee
 
       - name: Upload Trivy results to Security tab
-        if: always() && hashFiles('trivy-results.sarif') != ''
+        if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-results.sarif
