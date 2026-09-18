@@ -144,7 +144,7 @@ jobs:
           # a ouvrir l'onglet Security (qui necessite parfois des droits
           # supplementaires sur un depot prive).
       - name: Trivy scan (table, informational)
-        uses: aquasecurity/trivy-action@v0.37.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
            image-ref: findme-backend:${{ github.sha }}
            format: table
@@ -156,7 +156,7 @@ jobs:
           # Meme resultat, au format SARIF, publie dans l'onglet Security. C'est
           # cette etape qui fait echouer le job si une CVE HIGH/CRITICAL subsiste.
       - name: Trivy scan
-        uses: aquasecurity/trivy-action@v0.37.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
             image-ref: findme-backend:${{ github.sha }}
             format: sarif
