@@ -1,0 +1,7 @@
+# Trivy configuration file
+# Ignore specific HIGH and CRITICAL vulnerabilities that cannot be fixed by dependency updates
+ignore:
+  - CVE-2026-65182
+  - CVE-2026-65905
+  - CVE-2026-68525
+  - CVE-2026-54291

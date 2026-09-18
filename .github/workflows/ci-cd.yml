@@ -144,26 +144,26 @@ jobs:
           # a ouvrir l'onglet Security (qui necessite parfois des droits
           # supplementaires sur un depot prive).
       - name: Trivy scan (table, informational)
-        uses: aquasecurity/trivy-action@v0.36.0
+        uses: aquasecurity/trivy-action@v0.37.0
         with:
            image-ref: findme-backend:${{ github.sha }}
            format: table
            severity: HIGH,CRITICAL
            exit-code: '0'
-           trivyignores: .trivyignore
+           trivy-config: trivy.yaml
 
           # --- Etape bloquante (Quality Gate) -------------------------------------
           # Meme resultat, au format SARIF, publie dans l'onglet Security. C'est
           # cette etape qui fait echouer le job si une CVE HIGH/CRITICAL subsiste.
       - name: Trivy scan
-        uses: aquasecurity/trivy-action@v0.36.0
+        uses: aquasecurity/trivy-action@v0.37.0
         with:
             image-ref: findme-backend:${{ github.sha }}
             format: sarif
             output: trivy-results.sarif
             severity: HIGH,CRITICAL
             exit-code: '1' # bloque le job si une vulnerabilite haute/critique est trouvee
-            trivyignores: .trivyignore
+            trivy-config: trivy.yaml
 
       - name: Upload Trivy results to Security tab
         if: always() && hashFiles('trivy-results.sarif') != ''
