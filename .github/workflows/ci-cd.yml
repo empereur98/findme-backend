@@ -150,7 +150,7 @@ jobs:
            format: table
            severity: HIGH,CRITICAL
            exit-code: '0'
-           ignore-unfixed: true
+           trivyignores: .trivyignore
 
           # --- Etape bloquante (Quality Gate) -------------------------------------
           # Meme resultat, au format SARIF, publie dans l'onglet Security. C'est
@@ -163,7 +163,7 @@ jobs:
             output: trivy-results.sarif
             severity: HIGH,CRITICAL
             exit-code: '1' # bloque le job si une vulnerabilite haute/critique est trouvee
-            ignore-unfixed: true
+            trivyignores: .trivyignore
 
       - name: Upload Trivy results to Security tab
         if: always() && hashFiles('trivy-results.sarif') != ''
