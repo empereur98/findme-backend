@@ -9,7 +9,7 @@ COPY .mvn .mvn
 COPY src ./src
 
 RUN chmod +x mvnw
-RUN ./mvnw clean package -DskipTests -B
+RUN ./mvnw clean package -DskipTests -Dcheckstyle.skip=true -Dpmd.skip=true -B
 
 # Runtime stage
 FROM eclipse-temurin:21-jre-alpine
